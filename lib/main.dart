@@ -1,10 +1,16 @@
 // lib/main.dart
 
+import 'package:elearning_login/permission_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'login_page.dart';
+import 'home_page.dart';
+import 'splash_screen.dart';
 import 'login_model.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   runApp(MyApp());
 }
 
@@ -17,41 +23,13 @@ class MyApp extends StatelessWidget {
       home: LoginPage(),
       routes: {
         '/home': (context) => HomePage(),
+        '/login': (context) => LoginPage(),
+        '/permission': (context) => PermissionPage(),
+        '/splash': (context) => SplashScreen(
+              loginModel: LoginModel(),
+              nextRoute: '/home',
+            ),
       },
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Mengambil LoginModel dari argumen
-    final loginModel = ModalRoute.of(context)!.settings.arguments as LoginModel;
-
-    return Scaffold(
-      appBar: AppBar(title: Text('Home')),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('User ID: ${loginModel.user?['id'] ?? 'N/A'}',
-                style: TextStyle(fontSize: 18)),
-            Text('Name: ${loginModel.user?['name'] ?? 'N/A'}',
-                style: TextStyle(fontSize: 18)),
-            Text('Email Kantor: ${loginModel.user?['email_kantor'] ?? 'N/A'}',
-                style: TextStyle(fontSize: 18)),
-            Text('Email Pribadi: ${loginModel.user?['email_pribadi'] ?? 'N/A'}',
-                style: TextStyle(fontSize: 18)),
-            Text('Phone Number: ${loginModel.user?['phone_number'] ?? 'N/A'}',
-                style: TextStyle(fontSize: 18)),
-            Text('Job Role: ${loginModel.jobrole?['jobrole'] ?? 'N/A'}',
-                style: TextStyle(fontSize: 18)),
-            Text('Division: ${loginModel.division?['name'] ?? 'N/A'}',
-                style: TextStyle(fontSize: 18)),
-          ],
-        ),
-      ),
     );
   }
 }
